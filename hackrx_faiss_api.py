@@ -13,6 +13,10 @@ from pathlib import Path
 import tempfile
 import time
 import numpy as np
+import urllib3
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Import all components
 import fitz  # PyMuPDF
@@ -108,7 +112,8 @@ def initialize_ai_components():
 def download_pdf_from_url(url: str) -> str:
     """Download PDF from URL and save to temporary file"""
     try:
-        response = requests.get(url, timeout=30)
+        # Disable SSL verification for problematic URLs
+        response = requests.get(url, timeout=30, verify=False)
         response.raise_for_status()
         
         # Create temporary file
